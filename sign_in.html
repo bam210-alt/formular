@@ -1,8 +1,8 @@
 <!DOCTYPE html>
 
-<html>
-<head>
-  <meta http-equiv="CONTENT-TYPE" content="text/html; charset=UTF-8">
+<html lang="fr">
+  <meta http-equiv="Content-Type" charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>SIGN IN</title>
   <style>
   *{
@@ -131,10 +131,11 @@ input:active::placeholder{
 <body class="page">
   <div id="formular">
     <h1>Sign In</h1>
-    <form id="form">
-      <input type="email" id="email" placeholder="Email">
-      <input type="password" id="pwd" placeholder="Password">
-      <input type="name" id="sign_name" placeholder="Name">
+    <form id="form" method="post" action="sign.php">
+      <input name="nom" type="name" id="sign_name" placeholder="Name">
+      <input name="email"  id="email" placeholder="Email">
+      <input name="password" type="password" id="pwd" placeholder="Password">
+
   
       <button type="submit" id="btn">Sign In</button>
     </form>
