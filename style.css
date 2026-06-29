@@ -36,8 +36,8 @@ outline:none;
     border:2px solid black;
     border-radius:20px;
     max-width:70%;
-    margin: 35px  auto;
-    margin-top: 75px;
+    margin: 75px  auto;
+
     height:70vh;
    box-shadow: 5px -5px 25px black;
   }
@@ -110,7 +110,7 @@ input:active::placeholder{
   .link{
    font-size:20px;
   text-shadow: 5px -5px 25px rgb(248, 246, 246);
-    margin-top: 5px;
+    margin-top: 15px;
   }
   #link_login{
     color:black;

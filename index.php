@@ -11,14 +11,14 @@ if($_SERVER['REQUEST_METHOD']==="POST"){
     //tableau association ou tableau numerotes pour $erreurs
 
     if (empty($_POST['nom'])){
-        $erreurs['nom']="REQUIRED NAME";
+        $erreurs['nom']="Required name";
 
     }
 
     if (empty($_POST['email'])){
-        $erreurs['email']="REQUIRED EMAIL";
+        $erreurs['email']="Required email";
     }else if(!filter_var($_POST['email'],FILTER_VALIDATE_EMAIL)){
-        $erreurs['email-invalid']='INVALID EMAIL  ';
+        $erreurs['email-invalid']='Invalid email ';
     }
 
     $sql = 'SELECT id FROM utilisateur WHERE email=:email';
@@ -30,9 +30,8 @@ if($_SERVER['REQUEST_METHOD']==="POST"){
     if ($verification->fetch()){
         $erreurs['email-exist']="cet email existe deja ";
     } 
-
    if (empty($_POST['password'])){
-   $erreurs['password']="REQUIRED PASSWORD ";
+   $erreurs['password']="Required password ";
    }else if(strlen($_POST["password"])<6){
         $erreurs['password-invalid']='mot de passe trop court ';
 
@@ -72,9 +71,9 @@ echo 'PAGE 404 NOT FOUND ';
  <html lang="en">
  <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="sign.css">
-    <title>SIGN I</title>
+    <meta nae="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="style.css">
+    <title>SIGN IN</title>
  </head>
  <body class="page">
     <div id="formular">
@@ -85,6 +84,7 @@ echo 'PAGE 404 NOT FOUND ';
 
         <div  class="erreur"><?><?=  $erreurs['email'] ??' ' ?></div>
         <input type="text" name="email" id="email" placeholder ="EMAIL" value="<?= htmlspecialchars($_POST['email'] ?? '' )?>">
+        <div  class="erreur"><?><?=  $erreurs['email-invalid'] ??'' ?></div>
          <div  class="erreur"><?><?=  $erreurs['email-exist'] ??'' ?></div>
 
 
@@ -99,7 +99,7 @@ echo 'PAGE 404 NOT FOUND ';
 
     </form>
     </div>
-  
+
 
  </body>
  </html>
