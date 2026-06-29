@@ -29,23 +29,36 @@
     </style>
 </head>
 <body>
+<?php
+try { 
+    $mysqlClient = new PDO('mysql:host=localhost; dbname=inscription_db;charset=utf8', 'root', ''); }
+ catch (Exception $e) 
+ { die('Erreur: '.$e->getMessage());
+ }
+
+$data ="SELECT * FROM utilisateur";
+  $executeData= $mysqlClient->query($data);
+  $utilisateur= $executeData->fetchAll();
+
+  ?>
+    
     <table>
     
             <tr>
                 <th>Nom</th>
                 <th>Email</th>
                 <th>Mot de passe</th>
+                <th>Date Creation</th>
             </tr>
+        
             <tbody>
+            <?php foreach ($utilisateur as $user):  ?>
                 <tr>
-                    <td>sidi</td>
-                    <td>sidi2006@gmail.com</td>
-                    <td>sidi@2745</td>
-                </tr>
-                <tr>
-                    <td>ABDOU SALL</td>
-                    <td>ABDU1djjcjsjdnsdjnefefeiojidsniovnd20@gmail.com</td>
-                    <td>siididddjddjcndnsnd ccsdnidifidfifinfdn</td>
+                    <td><?= htmlspecialchars($user['nom']) ?></td>
+                    <td><?= htmlspecialchars($user ['email']) ?></td>
+                    <td><?= htmlspecialchars($user['password']) ?></td>
+                    <td><?= htmlspecialchars($user ['dateCreation']) ?></td>
+            <?php endforeach ; ?>
                 </tr>
 
             </tbody>

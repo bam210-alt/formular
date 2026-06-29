@@ -1,6 +1,6 @@
-CREATE DATABASE sign_db;
-USE sign_db;
-CREATE TABLE users(
+CREATE DATABASE inscription_db;
+USE inscription_db;
+CREATE TABLE utilisateur(
     id INT AUTO_INCREMENT PRIMARY KEY,
     nom VARCHAR(100) NOT NULL,
     email VARCHAR(100) NOT NULL UNIQUE, 

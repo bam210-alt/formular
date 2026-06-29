@@ -1,90 +1,112 @@
 <?php
-//VALIDATION
-if($_SERVER["REQUEST_METHOD"]==="POST"){
-$nom = $_POST ['nom'];
-$email = $_POST ['email'];
-$password = $_POST ['password'];
-}
-$pdo =new PDO(
-    "mysql:host=localhost;dbname=sign_db;
-    charset=utf8","root",""
-);
 
+//VALLIDATION, SECURISISATION ET PROTECTION ,EMPECHER EMAIL DOUBLE  ,AFFICHER ERREUR
+try { 
+    $mysqlClient = new PDO('mysql:host=localhost; dbname=inscription_db;charset=utf8', 'root', ''); }
+ catch (Exception $e) 
+ { die('Erreur: '.$e->getMessage());
+ }
 $erreurs =[];
+if($_SERVER['REQUEST_METHOD']==="POST"){
+    //tableau association ou tableau numerotes pour $erreurs
 
-//VALDATION NOM
-if(empty($nom) ){
-  $erreurs['empty-name'] ="NOm obligatoire ";
-}
+    if (empty($_POST['nom'])){
+        $erreurs['nom']="REQUIRED NAME";
 
-//VALDATION EMAIL
-if(isset($email)){
-$email =filter_var($email,FILTER_SANITIZE_EMAIL);
-   if(empty($email)){
-    $erreurs['empty-email']= "Email vide";
-}
-    elseif(!filter_var($email,FILTER_VALIDATE_EMAIL)){
-        $erreurs['invalid-email']= "email invalide";
     }
-    else{
-    "votre email est ".htmlspecialchars($email);
-       
+
+    if (empty($_POST['email'])){
+        $erreurs['email']="REQUIRED EMAIL";
+    }else if(!filter_var($_POST['email'],FILTER_VALIDATE_EMAIL)){
+        $erreurs['email-invalid']='INVALID EMAIL  ';
     }
-}
-else{
-    $erreurs['email-not-enterred']= "veuillez entrer votre email";
-}
-$existEmail= "SELECT * FROM users WHERE EMAIL =:email";
-$verifEmail =$pdo->prepare($existEmail);
- $verifEmail->execute(
+
+    $sql = 'SELECT id FROM utilisateur WHERE email=:email';
+    $verification= $mysqlClient->prepare($sql);
+    if(!empty($_POST['email'])){
+        $verification->execute(['email'=>$_POST['email']]);
+    }
+
+    if ($verification->fetch()){
+        $erreurs['email-exist']="cet email existe deja ";
+    } 
+
+   if (empty($_POST['password'])){
+   $erreurs['password']="REQUIRED PASSWORD ";
+   }else if(strlen($_POST["password"])<6){
+        $erreurs['password-invalid']='mot de passe trop court ';
+
+    }
+
+// ON PEUT AFFICHER LES ERREURS SUR UNE AUTRE PAGE SI ON UTILISE PAS CE CODE SUR LE FORMULAIRE HTML
+    if(empty($erreurs)){
+   $nom =$_POST['nom'];
+    $email =$_POST['email'];
+   $password =password_hash($_POST['password'],PASSWORD_DEFAULT) ;
+
+   $sqlquery ="INSERT INTO utilisateur (nom,email,password,dateCreation) VALUES (:nom,:email,:password,:dateCreation)";
+   $insertion =$mysqlClient->prepare($sqlquery);
+   try { 
+   $insertion ->execute(
     [
-        "email"=>$email
+        'nom'=> $nom,
+        'email'=> $email,
+        'password'=> $password,
+        'dateCreation'=>date("Y-m-d H:i:s")
     ]
-);
+   );
 
-$user =$verifEmail->fetch();
-if ($user){
-    $erreurs['used-email']= "Email already Used ";
+   header("Location:tableinscription.php");
+   exit();
+
+  }
+ catch (PDOException $e) {
+ 
+echo 'PAGE 404 NOT FOUND '
+ 
+ }
+
+    }else { 
+ ?>
+ <!DOCTYPE html>
+ <html lang="en">
+ <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="sign.css">
+    <title>SIGN I</title>
+ </head>
+ <body class="page">
+    <div id="formular">
+    <h1>Sign IN</h1>
+    <form action="sign.php" method="post">
+        <div class="erreur"><?=  $erreurs['nom'] ??' '?></div>
+        <input type="text" name="nom" id="sign_name" placeholder ="Name" value="<?= htmlspecialchars($_POST['nom'] ?? '' )?>"> 
+
+        <div  class="erreur"><?><?=  $erreurs['email'] ??' ' ?></div>
+        <input type="text" name="email" id="email" placeholder ="EMAIL" value="<?= htmlspecialchars($_POST['email'] ?? '' )?>">
+         <div  class="erreur"><?><?=  $erreurs['email-exist'] ??'' ?></div>
+
+
+        <input type="password" name="password" id="pwd"  placeholder ="Mot de Passe " > 
+        <div  class="erreur"><?><?=  $erreurs['password'] ??' ' ?></div>
+         <div  class="erreur"><?><?=  $erreurs['password-invalid'] ??' ' ?></div>
+ 
+
+        <input type="submit" value="submit" id="btn">
+    <p>You already have account?<a id ="link_login" href="login.html">Login</a></p>
+
+
+    </form>
+    </div>
+  
+
+ </body>
+ </html>
+
+  <?php 
+  }
 }
 
-//VALDATION PASSWORD
-
-if(isset($password)){
-   if(empty($password)){
- $erreurs['empty-password']= "Mot dePasse vide";
-}
-elseif (strlen($password)<5 ){
-    $erreurs['short-password']= 'mot de passe trop court';
-}
- else{
-    $password= htmlspecialchars($password);
-    $hashed_password= password_hash($password,PASSWORD_DEFAULT);
-    echo "votre mot de passe  est". $hashed_password ;
-       
-    }
-}
-
-
-
-
-
-
-
-if(!empty($erreurs)){
-    foreach($erreurs as $erreur){
-        echo $erreur."<br>";
-    }
-    exit();
-}
-
-
-
-$info = "INSERT INTO users (nom,email,password) VALUES(:nom,:email,:password )";
-$infosUsers = $pdo->prepare($info);
-$infosUsers->execute([
-   "nom"=> $nom,
-   "email"=> $email,
-   "password" =>$hashed_password
-]);
-
-?>
+   ?>
+  
