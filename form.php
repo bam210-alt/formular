@@ -5,11 +5,11 @@
    <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>SIGN IN</title>
-  <link rel="stylesheet" href="sign.css">
+  <link rel="stylesheet" href="./sign.css">
 </head>
 <body class="page">
   <div id="formular">
-    <h1>Sign In</h1>
+    <h1>SIGN IN</h1>
 
     
     <form id="form" method="post" action="sign.php">
@@ -35,7 +35,7 @@ loginLink.addEventListener("click", (e) => {
   document.body.classList.add("fade-out");
 
   setTimeout(() => {
-    window.location.href = "login.html";
+    window.location.href = "login.php";
   },1000);
 
 });

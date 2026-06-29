@@ -62,7 +62,7 @@ if($_SERVER['REQUEST_METHOD']==="POST"){
   }
  catch (PDOException $e) {
  
-echo 'PAGE 404 NOT FOUND '
+echo 'PAGE 404 NOT FOUND ';
  
  }
 
@@ -78,7 +78,7 @@ echo 'PAGE 404 NOT FOUND '
  </head>
  <body class="page">
     <div id="formular">
-    <h1>Sign IN</h1>
+    <h1>SIGN IN</h1>
     <form action="sign.php" method="post">
         <div class="erreur"><?=  $erreurs['nom'] ??' '?></div>
         <input type="text" name="nom" id="sign_name" placeholder ="Name" value="<?= htmlspecialchars($_POST['nom'] ?? '' )?>"> 

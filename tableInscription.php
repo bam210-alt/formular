@@ -5,25 +5,36 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>TABLE INSCRIPTION</title>
     <style>
+        h2,p{
+            text-align:center;
+            font-size:25px
+        }
         table{
             max-width: 60%;
             margin: 20px auto;
+            border-collapse:collapse;
         }
         th,td{
             padding: 10px;
         }
         tr{
-            border:px solid black;
-            background: orange;
+            border:1px solid black;
+            background: white;
 
 
         }
         th {
-            color: black;
+            background: black;
             text-transform: uppercase;
+            color:white;;
+            border:1px solid white
         }
         tbody{
-            color: white;
+            color: black;
+        }
+        tbody td {
+            border:1px solid black;
+            border
         }
 
     </style>
@@ -36,7 +47,19 @@ try {
  { die('Erreur: '.$e->getMessage());
  }
 
-$data ="SELECT * FROM utilisateur";
+$selectLastUser ="SELECT nom FROM utilisateur ORDER BY id DESC LIMIT 1 ";
+$last_user = $mysqlClient->query($selectLastUser);
+$display_last_user =$last_user->fetch();
+
+echo "<h2 >Bonjour {$display_last_user['nom']}</h2>";
+echo "<p>Vous etes maintenant inscrit</p>";
+
+
+
+
+
+
+$data ="SELECT nom,email,dateCreation FROM utilisateur";
   $executeData= $mysqlClient->query($data);
   $utilisateur= $executeData->fetchAll();
 
@@ -47,7 +70,6 @@ $data ="SELECT * FROM utilisateur";
             <tr>
                 <th>Nom</th>
                 <th>Email</th>
-                <th>Mot de passe</th>
                 <th>Date Creation</th>
             </tr>
         
@@ -56,7 +78,6 @@ $data ="SELECT * FROM utilisateur";
                 <tr>
                     <td><?= htmlspecialchars($user['nom']) ?></td>
                     <td><?= htmlspecialchars($user ['email']) ?></td>
-                    <td><?= htmlspecialchars($user['password']) ?></td>
                     <td><?= htmlspecialchars($user ['dateCreation']) ?></td>
             <?php endforeach ; ?>
                 </tr>
