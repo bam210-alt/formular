@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 
 <html lang="fr">
-  <meta http-equiv="Content-Type" charset="utf-8">
+   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>SIGN IN</title>
   <style>
@@ -33,8 +33,9 @@ outline:none;
   #formular{
    
     background: rgba(255,255,255,0.2);
-    backdrop-filter: blur(10px);
+  
     -webkit-backdrop-filter: blur(10px);
+    backdrop-filter: blur(10px);
     border:2px solid white;
     border-radius:20px;
     max-width:70%;
@@ -67,7 +68,7 @@ outline:none;
     padding-left: 15px;
     font-size:15px
 }
-  input:hover,
+
 input:focus 
 input:active{
       background:#007bff  ;
@@ -123,6 +124,9 @@ input:active::placeholder{
     color:white;
     
   }
+  .erreur{
+    color:red
+  }
   
   
   
@@ -133,8 +137,39 @@ input:active::placeholder{
     <h1>Sign In</h1>
     <form id="form" method="post" action="sign.php">
       <input name="nom" type="name" id="sign_name" placeholder="Name">
+     <?php
+     if(isset($erreurs["empty-name"])){
+     echo "<p class='erreur'>{$erreurs['empty-name']}</p>";
+     }
+     ?>
+
       <input name="email"  id="email" placeholder="Email">
+     <?php
+     if(isset($erreurs['empty-email'])){
+      echo"<p class='erreur'>{$erreurs['empty-email']}</p>";
+     } elseif(isset($erreurs['ivalid-email'])){
+      echo"<p class='erreur'> {$erreurs['invalid-email']}</p>";
+     }
+  
+     elseif(isset($erreurs['nom'])){
+     echo" <p class='erreur'>{$erreurs['empty-name']}</p>";
+     }
+     ?>
+
+
+
+
       <input name="password" type="password" id="pwd" placeholder="Password">
+     <?php
+     if(isset($erreurs['empty-password'])){
+     echo" <p class='erreur'> {$erreurs['empty-password']}</p>";
+     } 
+     if(isset($erreurs['short-password'])){
+      echo"<p class='erreur> {$erreurs['short-password']}</p>";
+     }
+     ?>
+
+    
 
   
       <button type="submit" id="btn">Sign In</button>
@@ -143,7 +178,7 @@ input:active::placeholder{
     <p>You already have account?<a id ="link_login" href="login.html">Login</a></p>
      
     <script>
-    
+
     const loginLink = document.getElementById("link_login");
 
 loginLink.addEventListener("click", (e) => {
